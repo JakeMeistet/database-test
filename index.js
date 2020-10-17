@@ -1,4 +1,5 @@
 const { Client } = require('pg');
+const readline = require('readline-sync')
 
 const client = new Client({
     user: 'up2002753',
@@ -15,22 +16,37 @@ INSERT INTO names (record_id, first_name, last_name)
 VALUES ('6', 'Sarah', 'Bailey')
 `;
 
-client.query(query, (err, res) => {
-    if (err) {
-        console.error(err);
-        return;
-    }
-    console.log('Data insert successful');
-    client.end();
-});
-
-const query1 = 'SELECT first_name FROM names;';
+const query1 = 'SELECT * FROM names;';
 
 client.query(query1, (err, res) => {
     if (err) {
         console.error(err);
         return;
     }
-    console.log(res);
-    client.end();
+    var dbData = res
+    for (i = 0; i < dbData.rows.length; i += 1){
+        console.log(dbData.rows[i].first_name)
+    }
+});
+
+
+
+
+
+var row = readline.question('What row would you like to choose? ')
+
+const query2 = 'SELECT ' + row + ' FROM names;';
+console.log(query2)
+
+client.query(query2, (err, res) => {
+    if (err) {
+        console.error(err);
+        return;
+    }
+    var dbData = res
+    for (i = 0; i < dbData.rows.length; i += 1){
+        var test = dbData.rows[i]
+        console.log (test.last_name)
+    }
+    client.end()
 });
